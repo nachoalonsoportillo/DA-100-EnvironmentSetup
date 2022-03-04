@@ -1,3 +1,10 @@
+$CdRomDriveLetter = "F:"
+$CdRomCurrentLetter = (Get-WmiObject -Class Win32_CDROMDrive).Drive
+$CdRomVolumeName = mountvol $CdRomCurrentLetter /l
+$CdRomVolumeName = $CdRomVolumeName.Trim()
+mountvol $CdRomCurrentLetter /d
+mountvol $CdRomDriveLetter $CdRomVolumeName
+
 Get-Disk |
 Where Number -eq 1 |
 Initialize-Disk -PartitionStyle MBR -PassThru |
