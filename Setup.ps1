@@ -18,6 +18,8 @@ $chocolateyAppList = "az.powershell,azure-cli,sql-server-management-studio,git,p
 
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
+choco install sql-server-2019 -y --params="'/IgnoreRebootPending /INSTANCENAME=MSSQLSERVER'"
+
 if ([string]::IsNullOrWhiteSpace($chocolateyAppList) -eq $false){   
     Write-Host "Chocolatey Apps Specified"  
     
@@ -29,8 +31,6 @@ if ([string]::IsNullOrWhiteSpace($chocolateyAppList) -eq $false){
         & choco install $app -y --ignore-checksums
     }
 }
-
-choco install sql-server-2019 -y --params="'/IgnoreRebootPending /INSTANCENAME=MSSQLSERVER'"
 
 Write-Host "Enable SQL TCP"
 $env:PSModulePath = $env:PSModulePath + ";C:\Program Files (x86)\Microsoft SQL Server\150\Tools\PowerShell\Modules"
