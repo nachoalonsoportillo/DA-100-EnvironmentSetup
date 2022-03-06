@@ -53,3 +53,10 @@ $Np
 
 Restart-Service -Name 'MSSQLSERVER'
 
+Set-Location D:\
+
+New-Item -Path "D:\" -Name "temp" -ItemType "directory"
+
+Set-Location D:\temp
+
+Start-Process -FilePath "c:\program files\git\bin\git" -ArgumentList "https://github.com/MicrosoftLearning/DA-100-Analyzing-Data-with-Power-BI.git"
