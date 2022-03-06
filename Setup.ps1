@@ -14,11 +14,9 @@ if ($PartitionStyle -ne "MBR"){
     Format-Volume -FileSystem NTFS -NewFileSystemLabel "Data Drive" -Confirm:$false    
 }
 
-$chocolateyAppList = "az.powershell,azure-cli,sql-server-management-studio,git,powerbi,powerbi-reportbuilder"
+$chocolateyAppList = "az.powershell,azure-cli,sql-server-management-studio,git,powerbi,powerbi-reportbuilder,sql-server-2019 --params=""'/IgnoreRebootPending:true'"""
 
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-
-choco install sql-server-2019 -y --params="'/IgnoreRebootPending /INSTANCENAME=MSSQLSERVER'"
 
 if ([string]::IsNullOrWhiteSpace($chocolateyAppList) -eq $false){   
     Write-Host "Chocolatey Apps Specified"  
