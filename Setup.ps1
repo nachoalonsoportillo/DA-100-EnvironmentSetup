@@ -14,7 +14,7 @@ if ($PartitionStyle -ne "MBR"){
     Format-Volume -FileSystem NTFS -NewFileSystemLabel "Data Drive" -Confirm:$false    
 }
 
-$chocolateyAppList = "az.powershell,azure-cli,sql-server-management-studio,git,sql-server-2019 -y --params=""'/IgnorePendingReboot /INSTANCENAME=MSSQLSERVER'"",powerbi,powerbi-reportbuilder"
+$chocolateyAppList = "az.powershell,azure-cli,sql-server-management-studio,git,sql-server-2019,powerbi,powerbi-reportbuilder"
 
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
@@ -59,4 +59,15 @@ New-Item -Path "D:\" -Name "temp" -ItemType "directory"
 
 Set-Location D:\temp
 
-Start-Process -FilePath "c:\program files\git\bin\git" -ArgumentList "https://github.com/MicrosoftLearning/DA-100-Analyzing-Data-with-Power-BI.git"
+Start-Process -FilePath "c:\program files\git\bin\git.exe" -ArgumentList "clone https://github.com/MicrosoftLearning/DA-100-Analyzing-Data-with-Power-BI.git" -NoNewWindow -Wait
+
+Move-Item -Path D:\temp\DA-100-Analyzing-Data-with-Power-BI\Allfiles\DA-100-Allfiles -Destination D:\DA-100
+
+Set-Location D:\
+
+Remove-Item -Path D:\temp -Recurse -Force
+
+Install-PackageProvider -Name Nuget -Force
+
+Install-Module SQLServer -Force
+
