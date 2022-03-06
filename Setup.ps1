@@ -5,13 +5,16 @@ $CdRomVolumeName = $CdRomVolumeName.Trim()
 mountvol $CdRomCurrentLetter /d
 mountvol $CdRomDriveLetter $CdRomVolumeName
 
-Get-Disk |
-Where Number -eq 1 |
-Initialize-Disk -PartitionStyle MBR -PassThru |
-New-Partition -AssignDriveLetter -UseMaximumSize |
-Format-Volume -FileSystem NTFS -NewFileSystemLabel "Data Drive" -Confirm:$false
+$PartitionStyle = (Get-Disk | Where Number -eq 1).PartitionStyle
+if ($PartitionStyle -ne "MBR"){
+    Get-Disk |
+    Where Number -eq 1 |
+    Initialize-Disk -PartitionStyle MBR -PassThru |
+    New-Partition -AssignDriveLetter -UseMaximumSize |
+    Format-Volume -FileSystem NTFS -NewFileSystemLabel "Data Drive" -Confirm:$false    
+}
 
-$chocolateyAppList = "az.powershell,azure-cli,sql-server-management-studio,git,sql-server-2019 -y --params=""'/IgnorePendingReboot /INSTANCENAME=MSSQLSERVER /BROWSERSVCSTARTUPTYPE=Automatic'"",powerbi,powerbi-reportbuilder"
+$chocolateyAppList = "az.powershell,azure-cli,sql-server-management-studio,git,sql-server-2019 -y --params=""'/IgnorePendingReboot /INSTANCENAME=MSSQLSERVER'"",powerbi,powerbi-reportbuilder"
 
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
@@ -23,7 +26,7 @@ if ([string]::IsNullOrWhiteSpace($chocolateyAppList) -eq $false){
     foreach ($app in $appsToInstall)
     {
         Write-Host "Installing $app"
-        & choco install $app /y
+        & choco install $app -y --ignore-checksums
     }
 }
 Write-Host "Enable SQL TCP"
