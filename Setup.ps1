@@ -87,6 +87,9 @@ Unregister-ScheduledTask -TaskName "LogonScript" -Confirm:$False
 
 Start-Transcript -Path C:\tmp\MyLog.log
 
+Write-Host "USUARIO ADMINISTRADOR==>>"
+Write-Host $adminUsername
+
 $Trigger = New-ScheduledTaskTrigger -AtLogOn
 $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument 'C:\tmp\LogonScript.ps1'
 Register-ScheduledTask -TaskName "LogonScript" -Trigger $Trigger -User "${adminUsername}" -Action $Action -RunLevel "Highest" -Force
