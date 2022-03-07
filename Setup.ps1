@@ -24,6 +24,18 @@ $chocolateyAppList = "az.powershell,azure-cli,sql-server-management-studio,git,p
 
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
+if ([string]::IsNullOrWhiteSpace($chocolateyAppList) -eq $false){   
+    Write-Host "Chocolatey Apps Specified"  
+
+    $appsToInstall = $chocolateyAppList -split "," | foreach { "$($_.Trim())" }
+
+    foreach ($app in $appsToInstall)
+    {
+        Write-Host "Installing $app"
+        & choco install $app -y --ignore-checksums
+    }
+}
+
 Set-Location D:\
 
 New-Item -Path "C:\" -Name "tmp" -ItemType "directory"
