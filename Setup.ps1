@@ -36,6 +36,8 @@ Remove-Item -Path D:\temp -Recurse -Force
 
 # Creating PowerShell Logon Script
 $LogonScript = @'
+Start-Transcript -Path C:\tmp\LogonScript.log
+
 Write-Host "Installing SQL Server and PowerShell Module"
 If(-not(Get-InstalledModule SQLServer -ErrorAction silentlycontinue)){
     Install-Module SQLServer -Confirm:$False -Force
