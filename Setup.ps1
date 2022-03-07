@@ -82,13 +82,12 @@ $Np.IsEnabled = $true
 $Np.Alter()  
 $Np
 Restart-Service -Name 'MSSQLSERVER'
+
+Invoke-Sqlcmd -ServerInstance . -Database master -Query "RESTORE DATABASE  [TailspinToys2020-US] FROM  DISK = N'D:\DA-100\DatabaseBackup\TailspinToys2020-US.bak' WITH  FILE = 1,  NOUNLOAD,  STATS = 5"
+Invoke-Sqlcmd -ServerInstance . -Database master -Query "RESTORE DATABASE [AdventureWorksDW2020] FROM  DISK = N'D:\DA-100\DatabaseBackup\AdventureWorksDW2020.bak' WITH  FILE = 1,  MOVE N'AdventureWorksDW2020' TO N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\AdventureWorksDW2020.mdf',  MOVE N'AdventureWorksDW2020_Log' TO N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\AdventureWorksDW2020_Log.ldf',  NOUNLOAD,  STATS = 5"
+
 Unregister-ScheduledTask -TaskName "LogonScript" -Confirm:$False
 '@ > C:\tmp\LogonScript.ps1
-
-Start-Transcript -Path C:\tmp\MyLog.log
-
-Write-Host "USUARIO ADMINISTRADOR==>>"
-Write-Host ${adminUsername}
 
 $Trigger = New-ScheduledTaskTrigger -AtLogOn
 $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument 'C:\tmp\LogonScript.ps1'
