@@ -4,7 +4,6 @@ param (
 
 [System.Environment]::SetEnvironmentVariable('adminUsername', $adminUsername,[System.EnvironmentVariableTarget]::Machine)
 
-<#
 $CdRomDriveLetter = "F:"
 $CdRomCurrentLetter = (Get-WmiObject -Class Win32_CDROMDrive).Drive
 $CdRomVolumeName = mountvol $CdRomCurrentLetter /l
@@ -51,13 +50,11 @@ Set-Location D:\
 
 Remove-Item -Path D:\temp -Recurse -Force
 
-#>
-
 New-Item -Path "C:\" -Name "tmp" -ItemType "directory"
 
 $LogonScript = @'
 Start-Transcript -Path C:\tmp\LogonScript.log
-
+Install-PackageProvider -Name "NuGet" -RequiredVersion "2.8.5.216" -Force
 Write-Host "Installing SQL Server and PowerShell Module"
 If(-not(Get-InstalledModule SQLServer -ErrorAction silentlycontinue)){
     Install-Module SQLServer -Confirm:$False -Force
