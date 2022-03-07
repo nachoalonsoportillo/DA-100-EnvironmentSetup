@@ -4,6 +4,7 @@ param (
 
 [System.Environment]::SetEnvironmentVariable('adminUsername', $adminUsername,[System.EnvironmentVariableTarget]::Machine)
 
+<#
 $CdRomDriveLetter = "F:"
 $CdRomCurrentLetter = (Get-WmiObject -Class Win32_CDROMDrive).Drive
 $CdRomVolumeName = mountvol $CdRomCurrentLetter /l
@@ -38,8 +39,6 @@ if ([string]::IsNullOrWhiteSpace($chocolateyAppList) -eq $false){
 
 Set-Location D:\
 
-New-Item -Path "C:\" -Name "tmp" -ItemType "directory"
-
 New-Item -Path "D:\" -Name "temp" -ItemType "directory"
 
 Set-Location D:\temp
@@ -51,6 +50,10 @@ Move-Item -Path D:\temp\DA-100-Analyzing-Data-with-Power-BI\Allfiles\DA-100-Allf
 Set-Location D:\
 
 Remove-Item -Path D:\temp -Recurse -Force
+
+#>
+
+New-Item -Path "C:\" -Name "tmp" -ItemType "directory"
 
 $LogonScript = @'
 Start-Transcript -Path C:\tmp\LogonScript.log
@@ -88,7 +91,7 @@ Unregister-ScheduledTask -TaskName "LogonScript" -Confirm:$False
 Start-Transcript -Path C:\tmp\MyLog.log
 
 Write-Host "USUARIO ADMINISTRADOR==>>"
-Write-Host $adminUsername
+Write-Host ${adminUsername}
 
 $Trigger = New-ScheduledTaskTrigger -AtLogOn
 $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument 'C:\tmp\LogonScript.ps1'
