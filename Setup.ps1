@@ -1,3 +1,9 @@
+param (
+    [string]$adminUsername
+)
+
+[System.Environment]::SetEnvironmentVariable('adminUsername', $adminUsername,[System.EnvironmentVariableTarget]::Machine)
+
 $CdRomDriveLetter = "F:"
 $CdRomCurrentLetter = (Get-WmiObject -Class Win32_CDROMDrive).Drive
 $CdRomVolumeName = mountvol $CdRomCurrentLetter /l
